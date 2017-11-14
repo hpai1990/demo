@@ -8,6 +8,10 @@ node{
    sh 'chmod a+x gradlew'
    sh './gradlew'
 }
+stage 'Docker Publish Approval'
+timeout(time:5, unit:'DAYS') {
+    input message:'Approve Docker publish?'
+}
 stage 'Build & publish Docker image'
 node{
    step([$class: 'DockerBuilderPublisher', cleanImages: false, cleanupWithJenkinsJobDelete: false, cloud: 'Docker Colony 2', dockerFileDirectory: '', pullCredentialsId: '', pushCredentialsId: '', pushOnSuccess: false, tagsString: 'realpipeline:latest'])
